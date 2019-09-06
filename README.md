@@ -2,7 +2,7 @@ Simple tool to split coco annotations (json) into train and test sets.
 
 ## Installation
 
-``cocosplit`` rquires python 3, and basic set of dependencies.
+``cocosplit`` requires python 3 and basic set of dependencies:
 
 ```
 pip install -r requirements
@@ -35,5 +35,5 @@ optional arguments:
 $ python cocosplit.py --having-annotations -s 0.8 /path/to/your/coco_annotations.json train.json test.json
 ```
 
-will split coco_annotation.json into train.json and test json with ration 80%/20% respectively. It will skip all
-images (``--having-annotations``) withouth annotations.
+will split ``coco_annotation.json`` into ``train.json`` and ``test.json`` with ratio 80%/20% respectively. It will skip all
+images (``--having-annotations``) without annotations.
