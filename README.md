@@ -2,7 +2,7 @@ Simple tool to split coco annotations (json) into train and test sets.
 
 ## Installation
 
-It rquires python 3, and basic set of dependencies.
+``cocosplit`` rquires python 3, and basic set of dependencies.
 
 ```
 pip install -r requirements
