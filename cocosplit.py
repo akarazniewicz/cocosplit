@@ -18,7 +18,7 @@ args = parser.parse_args()
 def save_coco(file, info, licenses, images, annotations, categories):
     with open(file, 'wt', encoding='UTF-8') as coco:
         json.dump({ 'info': info, 'licenses': licenses, 'images': images, 
-            'annotations': annotations, 'categories': categories}, coco)
+            'annotations': annotations, 'categories': categories}, coco, indent=2, sort_keys=True)
 
 def filter_annotations(annotations, images):
     image_ids = funcy.lmap(lambda i: int(i['id']), images)
