@@ -1,8 +1,14 @@
+it2.py
 import json
 import argparse
 import funcy
-from sklearn.model_selection import train_test_split
+import os, shutil
 
+from sklearn.model_selection import train_test_split
+train_dir = 'train2017/'
+os.makedirs('train2017', exist_ok=True)
+test_dir = 'test2017/'
+os.makedirs('test2017', exist_ok=True)
 parser = argparse.ArgumentParser(description='Splits COCO annotations file into training and test sets.')
 parser.add_argument('annotations', metavar='coco_annotations', type=str,
                     help='Path to COCO annotations file.')
@@ -12,12 +18,13 @@ parser.add_argument('-s', dest='split', type=float, required=True,
                     help="A percentage of a split; a number in (0, 1)")
 parser.add_argument('--having-annotations', dest='having_annotations', action='store_true',
                     help='Ignore all images without annotations. Keep only these with at least one annotation')
+parser.add_argument('images', type=str, help='Where images(dataset) is stored')
 
 args = parser.parse_args()
 
 def save_coco(file, info, licenses, images, annotations, categories):
     with open(file, 'wt', encoding='UTF-8') as coco:
-        json.dump({ 'info': info, 'licenses': licenses, 'images': images, 
+        json.dump({ 'info': info, 'licenses': licenses, 'images': images,
             'annotations': annotations, 'categories': categories}, coco, indent=2, sort_keys=True)
 
 def filter_annotations(annotations, images):
@@ -41,7 +48,8 @@ def main(args):
             images = funcy.lremove(lambda i: i['id'] not in images_with_annotations, images)
 
         x, y = train_test_split(images, train_size=args.split)
-
+        save_train = [shutil.copyfile(args.images + '/' + i['file_name'], train_dir + '/' + i['file_name']) for i in x]
+        save_test = [shutil.copyfile(args.images + '/' + j['file_name'], test_dir + '/' + j['file_name']) for j in y]
         save_coco(args.train, info, licenses, x, filter_annotations(annotations, x), categories)
         save_coco(args.test, info, licenses, y, filter_annotations(annotations, y), categories)
 
