@@ -21,7 +21,7 @@ positional arguments:
   coco_annotations      Path to COCO annotations file.
   train                 Where to store COCO training annotations
   test                  Where to store COCO test annotations
-
+  images             Where images(dataset) are stored
 optional arguments:
   -h, --help            show this help message and exit
   -s SPLIT              A percentage of a split; a number in (0, 1)
@@ -32,7 +32,7 @@ optional arguments:
 # Running
 
 ```
-$ python cocosplit.py --having-annotations -s 0.8 /path/to/your/coco_annotations.json train.json test.json
+$ python cocosplit.py --having-annotations -s 0.8 /path/to/your/coco_annotations.json train.json test.json images
 ```
 
 will split ``coco_annotation.json`` into ``train.json`` and ``test.json`` with ratio 80%/20% respectively. It will skip all
