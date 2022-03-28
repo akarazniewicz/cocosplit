@@ -23,10 +23,12 @@ positional arguments:
   test                  Where to store COCO test annotations
 
 optional arguments:
-  -h, --help            show this help message and exit
+  -h, --help            Show this help message and exit
   -s SPLIT              A percentage of a split; a number in (0, 1)
   --having-annotations  Ignore all images without annotations. Keep only these
                         with at least one annotation
+  --images_folder       Split the images into [images_folder]_train and
+                        [images_folder]_test
 ```
 
 # Running
