@@ -2,6 +2,8 @@ import json
 import argparse
 import funcy
 from sklearn.model_selection import train_test_split
+from pathlib import Path
+import shutil
 
 parser = argparse.ArgumentParser(description='Splits COCO annotations file into training and test sets.')
 parser.add_argument('annotations', metavar='coco_annotations', type=str,
@@ -12,6 +14,7 @@ parser.add_argument('-s', dest='split', type=float, required=True,
                     help="A percentage of a split; a number in (0, 1)")
 parser.add_argument('--having-annotations', dest='having_annotations', action='store_true',
                     help='Ignore all images without annotations. Keep only these with at least one annotation')
+parser.add_argument('--images_folder', type=str, help='Path to images folder')
 
 args = parser.parse_args()
 
@@ -24,11 +27,30 @@ def filter_annotations(annotations, images):
     image_ids = funcy.lmap(lambda i: int(i['id']), images)
     return funcy.lfilter(lambda a: int(a['image_id']) in image_ids, annotations)
 
+def split_images(images_folder, images, category):
+    images_folder = Path(images_folder)
+    new_dir = Path(images_folder.name + '_' + category)
+    new_dir.mkdir(exist_ok=True)
+
+    print(f"Copying {category} images...")
+    for img in images:
+        if (img["file_name"]).endswith('.jpg'):
+            shutil.copy(images_folder / img["file_name"], new_dir)
+
 def main(args):
     with open(args.annotations, 'rt', encoding='UTF-8') as annotations:
         coco = json.load(annotations)
-        info = coco['info']
-        licenses = coco['licenses']
+
+        if 'info' in coco:
+            info = coco['info']
+        else:
+            info = []
+
+        if 'licences' in coco:
+            licenses = coco['licenses']
+        else:
+            licenses = []
+
         images = coco['images']
         annotations = coco['annotations']
         categories = coco['categories']
@@ -44,6 +66,11 @@ def main(args):
 
         save_coco(args.train, info, licenses, x, filter_annotations(annotations, x), categories)
         save_coco(args.test, info, licenses, y, filter_annotations(annotations, y), categories)
+
+        if args.images_folder is not None:
+            split_images(args.images_folder, x, 'train')
+            split_images(args.images_folder, y, 'test')
+
 
         print("Saved {} entries in {} and {} in {}".format(len(x), args.train, len(y), args.test))
 
