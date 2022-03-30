@@ -1,6 +1,6 @@
 Simple tool to split a multi-label coco annotation dataset with preserving class distributions among train and test sets.
 
-The code is an updated version from akarazniewicz/cocosplit original repo, where the functionality of splitting multi-class data while preserving distributions is added.
+The code is an updated version from [akarazniewicz/cocosplit](https://github.com/akarazniewicz/cocosplit)  original repo, where the functionality of splitting multi-class data while preserving distributions is added.
 
 
 ## Installation
