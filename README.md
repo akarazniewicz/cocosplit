@@ -1,4 +1,7 @@
-Simple tool to split coco annotations (json) into train and test sets.
+Simple tool to split a multi-label coco annotation dataset with preserving class distributions among train and test sets.
+
+The code is an updated version from akarazniewicz/cocosplit original repo, where the functionality of splitting multi-class data while preserving distributions is added.
+
 
 ## Installation
 
@@ -9,6 +12,9 @@ pip install -r requirements
 ```
 
 ## Usage
+
+The same as the original repo, with adding an argument (``--multi-class``) to preserve class distributions
+The argument is optional to ensure backward compatibility
 
 ```
 $ python cocosplit.py -h
@@ -27,12 +33,14 @@ optional arguments:
   -s SPLIT              A percentage of a split; a number in (0, 1)
   --having-annotations  Ignore all images without annotations. Keep only these
                         with at least one annotation
+  --multi-class         Split a multi-class dataset while preserving class
+                        distributions in train and test sets
 ```
 
 # Running
 
 ```
-$ python cocosplit.py --having-annotations -s 0.8 /path/to/your/coco_annotations.json train.json test.json
+$ python cocosplit.py --having-annotations --multi-class -s 0.8 /path/to/your/coco_annotations.json train.json test.json
 ```
 
 will split ``coco_annotation.json`` into ``train.json`` and ``test.json`` with ratio 80%/20% respectively. It will skip all
