@@ -7,7 +7,7 @@ The code is an updated version from [akarazniewicz/cocosplit](https://github.com
 
 ``cocosplit`` requires python 3 and basic set of dependencies:
 
-``specifically, in addition to the original requirements of the original repo, (``scikit-multilearn``) is required, it is included the requirements.txt file
+specifically, in addition to the original requirements of the original repo, (``scikit-multilearn``) is required, it is included the requirements.txt file
 
 ```
 pip install -r requirements
