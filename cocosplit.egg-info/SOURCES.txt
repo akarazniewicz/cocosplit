@@ -1,9 +1,0 @@
-README.md
-setup.py
-cocosplit/__init__.py
-cocosplit/cocosplit.py
-cocosplit.egg-info/PKG-INFO
-cocosplit.egg-info/SOURCES.txt
-cocosplit.egg-info/dependency_links.txt
-cocosplit.egg-info/entry_points.txt
-cocosplit.egg-info/top_level.txt

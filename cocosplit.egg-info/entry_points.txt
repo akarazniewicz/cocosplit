@@ -1,2 +1,0 @@
-[console_scripts]
-cocosplit = cocosplit.cocosplit:main
