@@ -23,27 +23,31 @@ def filter_images(images, annotations):
     return funcy.lfilter(lambda a: int(a['id']) in annotation_ids, images)
 
 
-parser = argparse.ArgumentParser(description='Splits COCO annotations file into training and test sets.')
-parser.add_argument('annotations', metavar='coco_annotations', type=str,
-                    help='Path to COCO annotations file.')
-parser.add_argument('train', type=str, help='Where to store COCO training annotations')
-parser.add_argument('test', type=str, help='Where to store COCO test annotations')
-parser.add_argument('-s', dest='split', type=float, required=True,
-                    help="A percentage of a split; a number in (0, 1)")
-parser.add_argument('--having-annotations', dest='having_annotations', action='store_true',
-                    help='Ignore all images without annotations. Keep only these with at least one annotation')
+def main():
+    
+    parser = argparse.ArgumentParser(description='Splits COCO annotations file into training and test sets.')
+    parser.add_argument('annotations', metavar='coco_annotations', type=str,
+                        help='Path to COCO annotations file.')
+    parser.add_argument('train', type=str, help='Where to store COCO training annotations')
+    parser.add_argument('test', type=str, help='Where to store COCO test annotations')
+    parser.add_argument('-s', dest='split', type=float, required=True,
+                        help="A percentage of a split; a number in (0, 1)")
+    parser.add_argument('--having-annotations', dest='having_annotations', action='store_true',
+                        help='Ignore all images without annotations. Keep only these with at least one annotation')
 
-parser.add_argument('--multi-class', dest='multi_class', action='store_true',
-                    help='Split a multi-class dataset while preserving class distributions in train and test sets')
+    parser.add_argument('--multi-class', dest='multi_class', action='store_true',
+                        help='Split a multi-class dataset while preserving class distributions in train and test sets')
 
-args = parser.parse_args()
-
-def main(args):
+    args = parser.parse_args()
 
     with open(args.annotations, 'rt', encoding='UTF-8') as annotations:
         coco = json.load(annotations)
         info = coco['info']
-        licenses = coco['licenses']
+        try:
+            licenses = coco['licenses']
+        except KeyError as e:
+            print('no license found')
+            licenses = ''
         images = coco['images']
         annotations = coco['annotations']
         categories = coco['categories']
@@ -89,4 +93,5 @@ def main(args):
 
 
 if __name__ == "__main__":
-    main(args)
+    
+    main()
