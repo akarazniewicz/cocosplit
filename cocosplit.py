@@ -6,6 +6,7 @@ from skmultilearn.model_selection import iterative_train_test_split
 import numpy as np
 from tqdm import tqdm
 
+np.random.seed(42)
 
 def save_coco(file, info, licenses, images, annotations, categories):
     with open(file, 'wt', encoding='UTF-8') as coco:
@@ -68,7 +69,7 @@ def main(args):
             annotations =  funcy.lremove(lambda i: i['category_id'] not in annotation_categories  , annotations)
 
 
-            X_train, y_train, X_test, y_test = iterative_train_test_split(np.array([annotations]).T,np.array([ annotation_categories]).T, test_size = 1-args.split)
+            X_train, y_train, X_test, y_test = iterative_train_test_split(np.array([annotations]).T,np.array([ annotation_categories]).T, test_size = 1-args.split, random_state=42)
 
             save_coco(args.train, info, licenses, filter_images(images, X_train.reshape(-1)), X_train.reshape(-1).tolist(), categories)
             save_coco(args.test, info, licenses,  filter_images(images, X_test.reshape(-1)), X_test.reshape(-1).tolist(), categories)
@@ -77,7 +78,7 @@ def main(args):
             
         else:
 
-            X_train, X_test = train_test_split(images, train_size=args.split)
+            X_train, X_test = train_test_split(images, train_size=args.split, random_state=42)
 
             anns_train = filter_annotations(annotations, X_train)
             anns_test=filter_annotations(annotations, X_test)
