@@ -4,6 +4,7 @@ import funcy
 from sklearn.model_selection import train_test_split
 from skmultilearn.model_selection import iterative_train_test_split
 import numpy as np
+from tqdm import tqdm
 
 
 def save_coco(file, info, licenses, images, annotations, categories):
@@ -13,14 +14,14 @@ def save_coco(file, info, licenses, images, annotations, categories):
 
 def filter_annotations(annotations, images):
     image_ids = funcy.lmap(lambda i: int(i['id']), images)
-    return funcy.lfilter(lambda a: int(a['image_id']) in image_ids, annotations)
-
+    filtered_annotations = funcy.lfilter(lambda a: int(a['image_id']) in image_ids, tqdm(annotations, desc='Filtering Annotations'))
+    return filtered_annotations
 
 def filter_images(images, annotations):
-
     annotation_ids = funcy.lmap(lambda i: int(i['image_id']), annotations)
+    filtered_images = funcy.lfilter(lambda a: int(a['id']) in annotation_ids, tqdm(images, desc='Filtering Images'))
+    return filtered_images
 
-    return funcy.lfilter(lambda a: int(a['id']) in annotation_ids, images)
 
 
 parser = argparse.ArgumentParser(description='Splits COCO annotations file into training and test sets.')
