@@ -10,7 +10,7 @@ The code is an updated version from [akarazniewicz/cocosplit](https://github.com
 specifically, in addition to the requirements of the original repo, (``scikit-multilearn``) is required, it is included the requirements.txt file
 
 ```
-pip install -r requirements
+pip install -r requirements.txt
 ```
 
 
