@@ -6,10 +6,20 @@ from skmultilearn.model_selection import iterative_train_test_split
 import numpy as np
 
 
-def save_coco(file, images, annotations, categories, info=None, licenses=None):
+def save_coco(file, info, licenses, images, annotations, categories):
     with open(file, 'wt', encoding='UTF-8') as coco:
-        json.dump({'images': images, 'annotations': annotations, 'categories': categories,
-                   'info': info, 'licenses': licenses}, coco, indent=2, sort_keys=True)
+        if info and licenses:
+            json.dump({ 'images': images, 'annotations': annotations, 'categories': categories, 
+                    'info': info, 'licenses': licenses}, coco, indent=2, sort_keys=False)
+        elif info:
+            json.dump({ 'images': images, 'annotations': annotations, 'categories': categories, 
+                    'info': info}, coco, indent=2, sort_keys=False)
+        elif licenses:
+            json.dump({ 'images': images, 'annotations': annotations, 'categories': categories, 
+                    'licenses': licenses}, coco, indent=2, sort_keys=False)
+        else:
+            json.dump({ 'images': images, 'annotations': annotations, 'categories': categories}, 
+                      coco, indent=2, sort_keys=False)
 
 def filter_annotations(annotations, images):
     image_ids = funcy.lmap(lambda i: int(i['id']), images)
