@@ -6,10 +6,10 @@ from skmultilearn.model_selection import iterative_train_test_split
 import numpy as np
 
 
-def save_coco(file, info, licenses, images, annotations, categories):
+def save_coco(file, images, annotations, categories, info=None, licenses=None):
     with open(file, 'wt', encoding='UTF-8') as coco:
-        json.dump({ 'info': info, 'licenses': licenses, 'images': images, 
-            'annotations': annotations, 'categories': categories}, coco, indent=2, sort_keys=True)
+        json.dump({'images': images, 'annotations': annotations, 'categories': categories,
+                   'info': info, 'licenses': licenses}, coco, indent=2, sort_keys=True)
 
 def filter_annotations(annotations, images):
     image_ids = funcy.lmap(lambda i: int(i['id']), images)
@@ -35,6 +35,7 @@ parser.add_argument('--having-annotations', dest='having_annotations', action='s
 
 parser.add_argument('--multi-class', dest='multi_class', action='store_true',
                     help='Split a multi-class dataset while preserving class distributions in train and test sets')
+# parser.add_argument('--seq-id', dest='seq_id', action='store_true',help='Consider seq_id for grouping images into subsets')
 
 args = parser.parse_args()
 
@@ -42,8 +43,17 @@ def main(args):
 
     with open(args.annotations, 'rt', encoding='UTF-8') as annotations:
         coco = json.load(annotations)
-        info = coco['info']
-        licenses = coco['licenses']
+        # Check if 'info' and 'licenses' keys exist in the COCO annotations
+        if 'info' in coco:
+            info = coco['info']
+        else:
+            info = None
+        
+        if 'licenses' in coco:
+            licenses = coco['licenses']
+        else:
+            licenses = None
+            
         images = coco['images']
         annotations = coco['annotations']
         categories = coco['categories']
@@ -73,7 +83,7 @@ def main(args):
             save_coco(args.test, info, licenses,  filter_images(images, X_test.reshape(-1)), X_test.reshape(-1).tolist(), categories)
 
             print("Saved {} entries in {} and {} in {}".format(len(X_train), args.train, len(X_test), args.test))
-            
+
         else:
 
             X_train, X_test = train_test_split(images, train_size=args.split)
